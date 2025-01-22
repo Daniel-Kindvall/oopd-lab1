@@ -1,11 +1,14 @@
 import java.awt.*;
 
-abstract class Car {
+abstract class Car implements Movable {
     private int nrDoors; // Number of doors on the car
     private double enginePower; // Engine power of the car
     private double currentSpeed; // The current speed of the car
     private Color color; // Color of the car
     private String modelName; // The car model name
+
+    private double[] position = {0, 0};
+    private double[] direction = {0, 0};
 
     public Car(int nrDoors, double enginePower, Color color, String modelName) {
         this.nrDoors = nrDoors;
@@ -15,11 +18,15 @@ abstract class Car {
         stopEngine();
     }
 
+    public String getModelName() {
+        return modelName;
+    }
+
     public int getNrDoors(){
         return nrDoors;
     }
 
-    public void setNrDoors(int amount){
+    protected void setNrDoors(int amount){
         nrDoors = amount;
     }
 
@@ -31,7 +38,7 @@ abstract class Car {
         return currentSpeed;
     }
 
-    public void setCurrentSpeed(double speed) {
+    protected void setCurrentSpeed(double speed) {
         currentSpeed = speed;
     }
 
@@ -39,7 +46,7 @@ abstract class Car {
         return color;
     }
 
-    public void setColor(Color clr){
+    protected void setColor(Color clr){
 	    color = clr;
     }
 
@@ -64,6 +71,27 @@ abstract class Car {
     // TODO fix this method according to lab pm
     public void brake(double amount){
         decrementSpeed(amount);
+    }
+
+    @Override
+    public void move() {
+        // TODO Auto-generated method stub
+        position[0] = direction[0] * getCurrentSpeed() + position[0];
+        position[1] = direction[1] * getCurrentSpeed() + position[1];
+    }
+
+    @Override
+    public void turnLeft() {
+        // TODO Auto-generated method stub
+        position[0] = -position[1];
+        position[1] = position[0];
+    }
+
+    @Override
+    public void turnRight() {
+        // TODO Auto-generated method stub
+        position[1] = -position[0];
+        position[0] = position[1];
     }
 }
 
