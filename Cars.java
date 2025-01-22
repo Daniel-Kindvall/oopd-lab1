@@ -8,7 +8,7 @@ abstract class Car implements Movable {
     private String modelName; // The car model name
 
     private double[] position = {0, 0};
-    private double[] direction = {0, 0};
+    private double[] direction = {1, 0};
 
     public Car(int nrDoors, double enginePower, Color color, String modelName) {
         this.nrDoors = nrDoors;
@@ -75,23 +75,32 @@ abstract class Car implements Movable {
 
     @Override
     public void move() {
-        // TODO Auto-generated method stub
         position[0] = direction[0] * getCurrentSpeed() + position[0];
         position[1] = direction[1] * getCurrentSpeed() + position[1];
     }
 
     @Override
     public void turnLeft() {
-        // TODO Auto-generated method stub
-        position[0] = -position[1];
-        position[1] = position[0];
+        double[] previousDirection = new double[5];
+        System.arraycopy(direction, 0, previousDirection, 0, direction.length);
+        direction[0] = -previousDirection[1];
+        direction[1] = previousDirection[0];
     }
 
     @Override
     public void turnRight() {
-        // TODO Auto-generated method stub
-        position[1] = -position[0];
-        position[0] = position[1];
+        double[] previousDirection = new double[5];
+        System.arraycopy(direction, 0, previousDirection, 0, direction.length);
+        direction[1] = -previousDirection[0];
+        direction[0] = previousDirection[1];
+    }
+
+    public double[] getPosition() {
+        return position;
+    }
+
+    public double[] getDirection() {
+        return direction;
     }
 }
 
