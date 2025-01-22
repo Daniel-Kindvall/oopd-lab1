@@ -10,7 +10,7 @@ public class CarsTest {
     @Test
     public void testVolvo() {
         Assert.assertEquals(4, volvo.getNrDoors());
-        Assert.assertEquals(100.0, volvo.getEnginePower());
+        Assert.assertEquals(100.0, volvo.getEnginePower(), 0);
         Assert.assertEquals(Color.black, volvo.getColor());
         Assert.assertEquals("Volvo240", volvo.getModelName());
 
