@@ -65,11 +65,23 @@ abstract class Car implements Movable {
     
     // TODO fix this method according to lab pm
     public void gas(double amount){
+        if (amount > 1.00) {
+            amount = 1.00;
+        }
+        else if (amount < 0) {
+            amount = 0;
+        }
         incrementSpeed(amount);
     }
 
     // TODO fix this method according to lab pm
     public void brake(double amount){
+        if (amount > 1.00) {
+            amount = 1.00;
+        }
+        else if (amount < 0) {
+            amount = 0;
+        }
         decrementSpeed(amount);
     }
 
@@ -133,7 +145,12 @@ abstract class TurboCar extends Car {
 
     @Override
     protected void incrementSpeed(double amount){
-        setCurrentSpeed(getCurrentSpeed() + speedFactor() * amount);
+        if(getCurrentSpeed() < getEnginePower()){
+            setCurrentSpeed(getCurrentSpeed() + speedFactor() * amount);
+        }
+        if (getCurrentSpeed() > getEnginePower()) {
+            setCurrentSpeed((getEnginePower()));
+        }
     }
 
     @Override
