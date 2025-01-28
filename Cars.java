@@ -145,17 +145,12 @@ abstract class TurboCar extends Car {
 
     @Override
     protected void incrementSpeed(double amount){
-        if(getCurrentSpeed() < getEnginePower()){
-            setCurrentSpeed(getCurrentSpeed() + speedFactor() * amount);
-        }
-        if (getCurrentSpeed() > getEnginePower()) {
-            setCurrentSpeed((getEnginePower()));
-        }
+        setCurrentSpeed(Math.min(getCurrentSpeed() + speedFactor() * amount, getEnginePower()));
     }
 
     @Override
     protected void decrementSpeed(double amount){
-        setCurrentSpeed(getCurrentSpeed() - speedFactor() * amount);
+        setCurrentSpeed(Math.max(getCurrentSpeed() - speedFactor() * amount, 0));
     }
 }
 

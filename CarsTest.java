@@ -76,6 +76,11 @@ public class CarsTest {
         Assert.assertEquals(previousSpeed, volvo.getCurrentSpeed(), 0);
         volvo.brake(1000);
         Assert.assertEquals(previousSpeed - 0.01*1.25*100, volvo.getCurrentSpeed(), 0);
+
+        volvo.setNrDoors(2);
+        Assert.assertEquals(2, volvo.getNrDoors());
+        volvo.setColor(Color.green);
+        Assert.assertEquals(Color.green, volvo.getColor());
     }
 
     // Saab tests
@@ -146,14 +151,12 @@ public class CarsTest {
 
         saab.incrementSpeed(50);
         Assert.assertEquals(0.1 + (125*1.3*0.01*50), saab.getCurrentSpeed(), 0);
+
+        saab.setTurboOff();
+        Assert.assertFalse(saab.getTurboStatus());
+
+        saab.decrementSpeed(40);
+        Assert.assertEquals(31.35, saab.getCurrentSpeed(), 0.1);
     }
 
-    @Test
-    public void testGasBreak(){
-
-
-
-
-
-    }
 }
