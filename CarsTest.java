@@ -67,6 +67,15 @@ public class CarsTest {
         volvo.incrementSpeed(1000);
         Assert.assertTrue(volvo.getCurrentSpeed() > previousSpeed);
         Assert.assertEquals(volvo.getCurrentSpeed(), volvo.getEnginePower(), 0);
+
+        volvo.decrementSpeed(40);
+        Assert.assertEquals(50, volvo.getCurrentSpeed(), 0);
+
+        previousSpeed = volvo.getCurrentSpeed();
+        volvo.brake(-4);
+        Assert.assertEquals(previousSpeed, volvo.getCurrentSpeed(), 0);
+        volvo.brake(1000);
+        Assert.assertEquals(previousSpeed - 0.01*1.25*100, volvo.getCurrentSpeed(), 0);
     }
 
     // Saab tests
