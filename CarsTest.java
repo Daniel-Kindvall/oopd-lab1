@@ -64,6 +64,8 @@ public class CarsTest {
         Assert.assertEquals(previousSpeed, volvo.getCurrentSpeed(), 0);
         volvo.gas(1000);
         Assert.assertEquals(previousSpeed + 0.01*1.25*100, volvo.getCurrentSpeed(), 0);
+        volvo.gas(0.3);
+        Assert.assertEquals(64.225, volvo.getCurrentSpeed(), 0);
         volvo.incrementSpeed(1000);
         Assert.assertTrue(volvo.getCurrentSpeed() > previousSpeed);
         Assert.assertEquals(volvo.getCurrentSpeed(), volvo.getEnginePower(), 0);
@@ -76,6 +78,8 @@ public class CarsTest {
         Assert.assertEquals(previousSpeed, volvo.getCurrentSpeed(), 0);
         volvo.brake(1000);
         Assert.assertEquals(previousSpeed - 0.01*1.25*100, volvo.getCurrentSpeed(), 0);
+        volvo.brake(0.3);
+        Assert.assertEquals(48.375, volvo.getCurrentSpeed(), 0);
 
         volvo.setNrDoors(2);
         Assert.assertEquals(2, volvo.getNrDoors());
