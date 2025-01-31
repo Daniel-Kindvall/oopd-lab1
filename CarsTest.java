@@ -22,14 +22,15 @@ public class CarsTest {
         volvo.startEngine();
         Assert.assertEquals(0.1, volvo.getCurrentSpeed(), 0.0001);
 
-        volvo.incrementSpeed(50);
-        Assert.assertEquals(62.6, volvo.getCurrentSpeed(), 0.0001);
+        for (int i = 0; i < 10; i++) {
+            volvo.gas(1);
+        }
 
         volvo.move();
-        Assert.assertEquals(62.6, volvo.getPosition()[0], 0.0001);
+        Assert.assertEquals(12.6, volvo.getPosition()[0], 0.0001);
         Assert.assertEquals(0, volvo.getPosition()[1], 0.0001);
         volvo.move();
-        Assert.assertEquals(125.2, volvo.getPosition()[0], 0.0001);
+        Assert.assertEquals(25.2, volvo.getPosition()[0], 0.0001);
         Assert.assertEquals(0, volvo.getPosition()[1], 0.0001);
 
 
@@ -39,15 +40,15 @@ public class CarsTest {
         Assert.assertEquals(0, volvo.getDirection()[0], 0.0001);
         Assert.assertEquals(1, volvo.getDirection()[1], 0.0001);
         volvo.move();
-        Assert.assertEquals(125.2, volvo.getPosition()[0], 0.0001);
-        Assert.assertEquals(62.6, volvo.getPosition()[1], 0.0001);
+        Assert.assertEquals(25.2, volvo.getPosition()[0], 0.0001);
+        Assert.assertEquals(12.6, volvo.getPosition()[1], 0.0001);
         
         volvo.turnLeft();
         volvo.turnLeft();
         volvo.turnLeft();
         volvo.move();
-        Assert.assertEquals(187.8, volvo.getPosition()[0], 0.0001);
-        Assert.assertEquals(62.6, volvo.getPosition()[1], 0.0001);
+        Assert.assertEquals(37.8, volvo.getPosition()[0], 0.0001);
+        Assert.assertEquals(12.6, volvo.getPosition()[1], 0.0001);
 
         volvo.turnRight();
         volvo.turnRight();
@@ -55,8 +56,8 @@ public class CarsTest {
         volvo.move();
         volvo.move();
         volvo.move();
-        Assert.assertEquals(-62.6, volvo.getPosition()[0], 0.0001);
-        Assert.assertEquals(62.6, volvo.getPosition()[1], 0.0001);
+        Assert.assertEquals(-12.6, volvo.getPosition()[0], 0.0001);
+        Assert.assertEquals(12.6, volvo.getPosition()[1], 0.0001);
 
 
         double previousSpeed = volvo.getCurrentSpeed();
@@ -65,13 +66,14 @@ public class CarsTest {
         volvo.gas(1000);
         Assert.assertEquals(previousSpeed + 0.01*1.25*100, volvo.getCurrentSpeed(), 0);
         volvo.gas(0.3);
-        Assert.assertEquals(64.225, volvo.getCurrentSpeed(), 0);
-        volvo.incrementSpeed(1000);
+        Assert.assertEquals(14.225, volvo.getCurrentSpeed(), 0);
+
+        // Make sure that no matter how much we gas, the speed will never go above the engine power.
+        for (int i = 0; i < 100000; i++) {
+            volvo.gas(1);
+        }
         Assert.assertTrue(volvo.getCurrentSpeed() > previousSpeed);
         Assert.assertEquals(volvo.getCurrentSpeed(), volvo.getEnginePower(), 0);
-
-        volvo.decrementSpeed(40);
-        Assert.assertEquals(50, volvo.getCurrentSpeed(), 0);
 
         previousSpeed = volvo.getCurrentSpeed();
         volvo.brake(-4);
@@ -79,7 +81,7 @@ public class CarsTest {
         volvo.brake(1000);
         Assert.assertEquals(previousSpeed - 0.01*1.25*100, volvo.getCurrentSpeed(), 0);
         volvo.brake(0.3);
-        Assert.assertEquals(48.375, volvo.getCurrentSpeed(), 0);
+        Assert.assertEquals(98.375, volvo.getCurrentSpeed(), 0);
 
         volvo.setNrDoors(2);
         Assert.assertEquals(2, volvo.getNrDoors());
@@ -100,48 +102,19 @@ public class CarsTest {
     @Test
     public void testSaabMovement() {
         saab.startEngine();
-        Assert.assertEquals(0.1, saab.getCurrentSpeed(), 0);
-
-        saab.startEngine();
         Assert.assertEquals(0.1, saab.getCurrentSpeed(), 0.0001);
 
-        saab.incrementSpeed(50);
-        Assert.assertEquals(62.6, saab.getCurrentSpeed(), 0);
-
-
+        for (int i = 0; i < 10; i++) {
+            saab.gas(1);
+        }
 
         saab.move();
-        Assert.assertEquals(62.6, saab.getPosition()[0], 0.0001);
+        Assert.assertEquals(12.6, saab.getPosition()[0], 0.0001);
         Assert.assertEquals(0, saab.getPosition()[1], 0.0001);
         saab.move();
-        Assert.assertEquals(125.2, saab.getPosition()[0], 0.0001);
+        Assert.assertEquals(25.2, saab.getPosition()[0], 0.0001);
         Assert.assertEquals(0, saab.getPosition()[1], 0.0001);
 
-
-        Assert.assertEquals(1, saab.getDirection()[0], 0.0001);
-        Assert.assertEquals(0, saab.getDirection()[1], 0.0001);
-        saab.turnLeft();
-        Assert.assertEquals(0, saab.getDirection()[0], 0.0001);
-        Assert.assertEquals(1, saab.getDirection()[1], 0.0001);
-        saab.move();
-        Assert.assertEquals(125.2, saab.getPosition()[0], 0.0001);
-        Assert.assertEquals(62.6, saab.getPosition()[1], 0.0001);
-
-        saab.turnLeft();
-        saab.turnLeft();
-        saab.turnLeft();
-        saab.move();
-        Assert.assertEquals(187.8, saab.getPosition()[0], 0.0001);
-        Assert.assertEquals(62.6, saab.getPosition()[1], 0.0001);
-
-        saab.turnRight();
-        saab.turnRight();
-        saab.move();
-        saab.move();
-        saab.move();
-        saab.move();
-        Assert.assertEquals(-62.6, saab.getPosition()[0], 0.0001);
-        Assert.assertEquals(62.6, saab.getPosition()[1], 0.0001);
 
 
         saab.stopEngine();
@@ -153,14 +126,14 @@ public class CarsTest {
         saab.setTurboOn();
         Assert.assertTrue(saab.getTurboStatus());
 
-        saab.incrementSpeed(50);
-        Assert.assertEquals(0.1 + (125*1.3*0.01*50), saab.getCurrentSpeed(), 0);
+        for (int i = 0; i < 10; i++) {
+            saab.gas(1);
+        }
+
+        Assert.assertEquals(16.35, saab.getCurrentSpeed(), 0.0001);
 
         saab.setTurboOff();
         Assert.assertFalse(saab.getTurboStatus());
-
-        saab.decrementSpeed(40);
-        Assert.assertEquals(31.35, saab.getCurrentSpeed(), 0.1);
     }
 
 }

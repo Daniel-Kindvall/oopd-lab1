@@ -60,9 +60,14 @@ abstract class Car implements Movable {
 
     abstract double speedFactor();
 
-    abstract void incrementSpeed(double amount);
-    abstract void decrementSpeed(double amount);
-    
+    private void incrementSpeed(double amount){
+        setCurrentSpeed(Math.min(getCurrentSpeed() + speedFactor() * amount, getEnginePower()));
+    }
+
+    private void decrementSpeed(double amount){
+        setCurrentSpeed(Math.max(getCurrentSpeed() - speedFactor() * amount, 0));
+    }
+
     // TODO fix this method according to lab pm
     public void gas(double amount){
         if (amount > 1.00) {
@@ -143,15 +148,6 @@ abstract class TurboCar extends Car {
         return getEnginePower() * 0.01 * turbo;
     }
 
-    @Override
-    protected void incrementSpeed(double amount){
-        setCurrentSpeed(Math.min(getCurrentSpeed() + speedFactor() * amount, getEnginePower()));
-    }
-
-    @Override
-    protected void decrementSpeed(double amount){
-        setCurrentSpeed(Math.max(getCurrentSpeed() - speedFactor() * amount, 0));
-    }
 }
 
 abstract class TrimCar extends Car {
@@ -168,13 +164,4 @@ abstract class TrimCar extends Car {
         return getEnginePower() * 0.01 * trimFactor;
     }
 
-    @Override
-    protected void incrementSpeed(double amount){
-	    setCurrentSpeed(Math.min(getCurrentSpeed() + speedFactor() * amount, getEnginePower()));
-    }
-
-    @Override
-    protected void decrementSpeed(double amount){
-        setCurrentSpeed(Math.max(getCurrentSpeed() - speedFactor() * amount, 0));
-    }
 }
