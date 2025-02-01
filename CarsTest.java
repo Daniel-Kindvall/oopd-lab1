@@ -136,4 +136,8 @@ public class CarsTest {
         Assert.assertFalse(saab.getTurboStatus());
     }
 
+    @Test
+    public void testScania(){
+        //Add tests here!
+    }
 }
