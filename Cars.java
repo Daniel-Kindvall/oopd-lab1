@@ -98,7 +98,7 @@ abstract class Car implements Movable {
 
     @Override
     public void turnLeft() {
-        double[] previousDirection = new double[5];
+        double[] previousDirection = new double[2];
         System.arraycopy(direction, 0, previousDirection, 0, direction.length);
         direction[0] = -previousDirection[1];
         direction[1] = previousDirection[0];
@@ -106,7 +106,7 @@ abstract class Car implements Movable {
 
     @Override
     public void turnRight() {
-        double[] previousDirection = new double[5];
+        double[] previousDirection = new double[2];
         System.arraycopy(direction, 0, previousDirection, 0, direction.length);
         direction[1] = -previousDirection[0];
         direction[0] = previousDirection[1];
