@@ -14,7 +14,7 @@ public abstract class Truck extends TrimCar {
         if(getCurrentSpeed() > 0){
             return;
         }
-        cargoBedAngle = cargoBedAngle + amount;
+        cargoBedAngle = cargoBedAngle + Math.abs(amount);
         if(cargoBedAngle > 70){
             cargoBedAngle = 70;
         }
@@ -22,7 +22,7 @@ public abstract class Truck extends TrimCar {
     }
 
     public void lowerCargoBed(double amount){
-        cargoBedAngle = cargoBedAngle + amount;
+        cargoBedAngle = cargoBedAngle - Math.abs(amount);
         if (cargoBedAngle <= 0) {
             cargoBedAngle = 0;
             removeMovementHindrance("cargoBedIsRaised");

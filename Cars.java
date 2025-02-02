@@ -13,7 +13,7 @@ abstract class Car implements Movable {
     private double[] direction = {1, 0};
 
     private int carSize;
-    Set<String> movementHindrances = new HashSet<>();
+    private Set<String> movementHindrances = new HashSet<>();
 
     public Car(int nrDoors, double enginePower, Color color, String modelName, int carSize) {
         this.nrDoors = nrDoors;
@@ -25,14 +25,14 @@ abstract class Car implements Movable {
     }
 
     public void addMovementHindrance(String hindranceName) {
-        movementHindrances.add(hindranceName);
+        this.movementHindrances.add(hindranceName);
     }
 
     public void removeMovementHindrance(String hindranceName) {
-        movementHindrances.remove(hindranceName);
+        this.movementHindrances.remove(hindranceName);
     }
 
-    public boolean isMoveable(boolean... conditions) {
+    public boolean isMoveable() {
         if (movementHindrances.size() > 0) {
             return false;
         }

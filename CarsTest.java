@@ -6,8 +6,10 @@ import org.junit.Test;
 public class CarsTest {
     Volvo240 volvo = new Volvo240();
     Saab95 saab = new Saab95();
+    Scania scania = new Scania();
+    CarTransport cartransport = new CarTransport();
 
-    // Volvo s
+    // Volvo tests
     @Test
     public void volvoInstantiation() {
         Assert.assertEquals(4, volvo.getNrDoors());
@@ -21,6 +23,8 @@ public class CarsTest {
     public void volvoMovement() {
         volvo.startEngine();
         Assert.assertEquals(0.1, volvo.getCurrentSpeed(), 0.0001);
+
+        volvo.isMoveable();
 
         for (int i = 0; i < 10; i++) {
             volvo.gas(1);
@@ -89,7 +93,7 @@ public class CarsTest {
         Assert.assertEquals(Color.green, volvo.getColor());
     }
 
-    // Saab s
+    // Saab tests
     @Test
     public void saabInstantiation() {
         Assert.assertEquals(2, saab.getNrDoors());
@@ -149,11 +153,31 @@ public class CarsTest {
     // Truck tests
     @Test
     public void truckCargoBedAngleConstraints() {
+        // Check maximum limit.
+        scania.raiseCargoBed(30);
+        Assert.assertEquals(30, scania.getCargoBedAngle(), 0.0001);
+        scania.raiseCargoBed(90);
+        Assert.assertTrue(scania.getCargoBedAngle() <= 70);
 
+        // Check minimum limit.
+        scania.lowerCargoBed(30);
+        Assert.assertEquals(40, scania.getCargoBedAngle(), 0.0001);
+        scania.lowerCargoBed(90);
+        Assert.assertTrue(scania.getCargoBedAngle() >= 0);
+
+        // Ensure that negative values don't bypass the safety checks.
+        scania.raiseCargoBed(-100);
+        Assert.assertTrue(scania.getCargoBedAngle() <= 70 && scania.getCargoBedAngle() >= 0);
+        scania.lowerCargoBed(-100);
+        Assert.assertTrue(scania.getCargoBedAngle() <= 70 && scania.getCargoBedAngle() >= 0);
     }
     @Test
     public void truckCargoBedMovementConstraints() {
-
+        scania.startEngine();
+        scania.gas(1);
+        double previousBedAngle = scania.getCargoBedAngle();
+        scania.raiseCargoBed(70);
+        Assert.assertEquals(previousBedAngle, scania.getCargoBedAngle(), 0.0001);
     }
 
     // Car transport tests
@@ -195,5 +219,32 @@ public class CarsTest {
         workshop.removeCar(car1);
         // Expect an Error when removing a car that is not in the workshop.
         Assert.assertThrows(Error.class, () -> workshop.removeCar(car1));
+    }
+
+    // Test movement hindrance
+    @Test
+    public void testCarMovementHindrance() {
+        CarTransport cartransport = new CarTransport();
+        Saab95 car = new Saab95();
+        car.setPosition(cartransport.getPosition());
+
+        cartransport.raiseCargoBed();
+
+        // Assure the transport is able to load the car
+        Assert.assertEquals(1, car.getSize(), 0.0001);
+        Assert.assertTrue(cartransport.getCargoBedAngle() > 0);
+        Assert.assertEquals(cartransport.getPosition()[0], car.getPosition()[0], 0.0001);
+        Assert.assertEquals(cartransport.getPosition()[1], car.getPosition()[1], 0.0001);
+
+        // Make sure the car is loaded into the transport
+        Assert.assertTrue(cartransport.loadCar(car));
+
+        // Assure the car doesn't move when loaded
+        Assert.assertEquals(false, car.isMoveable());
+        car.startEngine();
+        car.move();
+        Assert.assertEquals(cartransport.getPosition()[0], car.getPosition()[0], 0.0001);
+        Assert.assertEquals(cartransport.getPosition()[1], car.getPosition()[1], 0.0001);
+        car.stopEngine();
     }
 }
