@@ -3,7 +3,7 @@ import java.awt.*;
 public class Scania extends TrimCar{
     double cargoBedAngle;
 
-    public Scania(int nrDoors, double enginePower, Color color, String modelName, double trimFactor){
+    public Scania(){
         super(2, 400, Color.blue, "Scania", 0.5);
         this.cargoBedAngle = 0;
     }

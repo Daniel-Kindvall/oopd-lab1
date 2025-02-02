@@ -137,7 +137,12 @@ public class CarsTest {
     }
 
     @Test
-    public void testScania(){
-        //Add tests here!
+    public void testScaniaCargoBed(){
+        Scania scania = new Scania();
+        scania.startEngine();
+        scania.gas(1);
+        scania.raiseCargoBed(10);
+        Assert.assertEquals(0, scania.getCargoBedAngle(), 0);
+        //Add more tests (if you feel like it)
     }
 }
