@@ -1,4 +1,6 @@
 import java.awt.*;
+import java.util.Set;
+import java.util.HashSet;
 
 abstract class Car implements Movable {
     private int nrDoors; // Number of doors on the car
@@ -10,12 +12,35 @@ abstract class Car implements Movable {
     private double[] position = {0, 0};
     private double[] direction = {1, 0};
 
-    public Car(int nrDoors, double enginePower, Color color, String modelName) {
+    private int carSize;
+    Set<String> movementHindrances = new HashSet<>();
+
+    public Car(int nrDoors, double enginePower, Color color, String modelName, int carSize) {
         this.nrDoors = nrDoors;
         this.enginePower = enginePower;
         this.color = color;
         this.modelName = modelName;
+        this.carSize = carSize;
         stopEngine();
+    }
+
+    public void addMovementHindrance(String hindranceName) {
+        movementHindrances.add(hindranceName);
+    }
+
+    public void removeMovementHindrance(String hindranceName) {
+        movementHindrances.remove(hindranceName);
+    }
+
+    public boolean isMoveable(boolean... conditions) {
+        if (movementHindrances.size() > 0) {
+            return false;
+        }
+        return true;
+    }
+
+    public int getSize() {
+        return carSize;
     }
 
     public String getModelName() {
@@ -92,8 +117,10 @@ abstract class Car implements Movable {
 
     @Override
     public void move() {
-        position[0] = direction[0] * getCurrentSpeed() + position[0];
-        position[1] = direction[1] * getCurrentSpeed() + position[1];
+        if (isMoveable()) {
+            position[0] = direction[0] * getCurrentSpeed() + position[0];
+            position[1] = direction[1] * getCurrentSpeed() + position[1];
+        }
     }
 
     @Override
@@ -116,6 +143,10 @@ abstract class Car implements Movable {
         return position;
     }
 
+    public void setPosition(double[] newPosition) {
+        position = newPosition;
+    }
+
     public double[] getDirection() {
         return direction;
     }
@@ -125,8 +156,8 @@ abstract class TurboCar extends Car {
 
     private boolean turboOn = false;
 
-    public TurboCar(int nrDoors, double enginePower, Color color, String modelName){
-        super(nrDoors, enginePower, color, modelName);
+    public TurboCar(int nrDoors, double enginePower, Color color, String modelName, int carSize){
+        super(nrDoors, enginePower, color, modelName, carSize);
     }
 
     public boolean getTurboStatus() {
@@ -154,8 +185,8 @@ abstract class TrimCar extends Car {
 
     private final double trimFactor;
 
-    public TrimCar(int nrDoors, double enginePower, Color color, String modelName, double trimFactor){
-        super(nrDoors, enginePower, color, modelName);
+    public TrimCar(int nrDoors, double enginePower, Color color, String modelName, int carSize, double trimFactor){
+        super(nrDoors, enginePower, color, modelName, carSize);
         this.trimFactor = trimFactor;
     }
 

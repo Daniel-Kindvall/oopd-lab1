@@ -7,9 +7,9 @@ public class CarsTest {
     Volvo240 volvo = new Volvo240();
     Saab95 saab = new Saab95();
 
-    // Volvo tests
+    // Volvo s
     @Test
-    public void testVolvoInstantiation() {
+    public void volvoInstantiation() {
         Assert.assertEquals(4, volvo.getNrDoors());
         Assert.assertEquals(100.0, volvo.getEnginePower(), 0);
         Assert.assertEquals(Color.black, volvo.getColor());
@@ -18,7 +18,7 @@ public class CarsTest {
     }
 
     @Test
-    public void testVolvoMovement() {
+    public void volvoMovement() {
         volvo.startEngine();
         Assert.assertEquals(0.1, volvo.getCurrentSpeed(), 0.0001);
 
@@ -89,9 +89,9 @@ public class CarsTest {
         Assert.assertEquals(Color.green, volvo.getColor());
     }
 
-    // Saab tests
+    // Saab s
     @Test
-    public void testSaabInstantiation() {
+    public void saabInstantiation() {
         Assert.assertEquals(2, saab.getNrDoors());
         Assert.assertEquals(125.0, saab.getEnginePower(), 0);
         Assert.assertEquals(Color.red, saab.getColor());
@@ -100,7 +100,7 @@ public class CarsTest {
     }
 
     @Test
-    public void testSaabMovement() {
+    public void saabMovement() {
         saab.startEngine();
         Assert.assertEquals(0.1, saab.getCurrentSpeed(), 0.0001);
 
@@ -137,12 +137,63 @@ public class CarsTest {
     }
 
     @Test
-    public void testScaniaCargoBed(){
+    public void scaniaCargoBed(){
         Scania scania = new Scania();
         scania.startEngine();
         scania.gas(1);
         scania.raiseCargoBed(10);
         Assert.assertEquals(0, scania.getCargoBedAngle(), 0);
         //Add more tests (if you feel like it)
+    }
+
+    // Truck tests
+    @Test
+    public void truckCargoBedAngleConstraints() {
+
+    }
+    @Test
+    public void truckCargoBedMovementConstraints() {
+
+    }
+
+    // Car transport tests
+    @Test
+    public void carTransportLoading() {
+
+    }
+    @Test
+    public void carTransportUnloading() {
+
+    }
+    @Test
+    public void carTransportStack() {
+
+    }
+    @Test
+    public void carTransportLoadingSize() {
+
+    }
+    @Test
+    public void carTransportLoadedCarPosition() {
+
+    }
+    @Test
+    public void carTransportCapacity() {
+
+    }
+
+
+    // Car Workshop tests
+    @Test
+    public void workshopCapacity() {
+        CarWorkshop<Saab95> workshop = new CarWorkshop<>(1);
+        Saab95 car1 = new Saab95();
+        workshop.addCar(car1); // First car added, filling up the capacity
+        // Expect an Error when adding another car beyond capacity
+        Assert.assertThrows(Error.class, () -> workshop.addCar(car1));
+
+        workshop.removeCar(car1);
+        // Expect an Error when removing a car that is not in the workshop.
+        Assert.assertThrows(Error.class, () -> workshop.removeCar(car1));
     }
 }
