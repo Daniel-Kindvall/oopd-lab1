@@ -35,7 +35,7 @@ public class CarTransport extends Truck{
             this.getCargoBedAngle() > 0 &&
             calculateDistance(car) < 12.5 &&
             car.getSize() <= maxCarSize &&
-            carStack.size() <= carStackSize
+            carStack.size() < carStackSize
         ) {
             car.addMovementHindrance("isLoadedOnTransport");
             carStack.push(car);
@@ -46,14 +46,20 @@ public class CarTransport extends Truck{
         return false;
     }
 
-    public void unloadCar() {
-        if (this.getCargoBedAngle() > 0 ) {
+    public Car unloadCar() {
+        if (this.getCargoBedAngle() > 0 && this.carStack.size() > 0) {
             Car car = carStack.pop();
             double[] carPos = new double[2];
             carPos[0] = this.getPosition()[0] - this.getDirection()[0] * 10;
             carPos[1] = this.getPosition()[1] - this.getDirection()[1] * 10;
             car.setPosition(carPos);
             car.removeMovementHindrance("isLoadedOnTransport");
+            return car;
+        }
+        if (this.getCargoBedAngle() <= 0) {
+            throw new Error("The cargobed is closed.");
+        } else {
+            throw new Error("There are no cars on the car transport.");
         }
     }
 

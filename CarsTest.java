@@ -143,6 +143,12 @@ public class CarsTest {
     @Test
     public void scaniaCargoBed(){
         Scania scania = new Scania();
+
+        scania.raiseCargoBed(10);
+        Assert.assertEquals(10, scania.getCargoBedAngle(), 0);
+        scania.lowerCargoBed(10);
+        Assert.assertEquals(00, scania.getCargoBedAngle(), 0);
+
         scania.startEngine();
         scania.gas(1);
         scania.raiseCargoBed(10);
@@ -183,27 +189,145 @@ public class CarsTest {
     // Car transport tests
     @Test
     public void carTransportLoading() {
+        CarTransport cartransport = new CarTransport();
 
+        // Create car that should be able to be loaded
+        Saab95 car = new Saab95();
+        car.setPosition(cartransport.getPosition());
+
+        // Assure that the cartransport won't load a car when the ramp is closed.
+        Assert.assertFalse(cartransport.loadCar(car));
+
+        cartransport.raiseCargoBed();
+        // Assure the transport should be able to load the car
+        Assert.assertEquals(1, car.getSize(), 0.0001);
+        Assert.assertTrue(cartransport.getCargoBedAngle() > 0);
+        Assert.assertEquals(cartransport.getPosition()[0], car.getPosition()[0], 0.0001);
+        Assert.assertEquals(cartransport.getPosition()[1], car.getPosition()[1], 0.0001);
+
+        Assert.assertTrue(cartransport.loadCar(car));
     }
     @Test
     public void carTransportUnloading() {
+        CarTransport cartransport = new CarTransport();
+        cartransport.raiseCargoBed();
 
+        Saab95 car = new Saab95();
+        car.setPosition(cartransport.getPosition());
+        Assert.assertTrue(cartransport.loadCar(car));
+
+        // Assure an error is thrown if the ramp is closed.
+        cartransport.lowerCargoBed();
+        Assert.assertThrows(Error.class, () -> cartransport.unloadCar());
+
+        cartransport.raiseCargoBed();
+        cartransport.unloadCar();
+
+        // Assure an error is thrown if there are no cars on the transport.
+        Assert.assertThrows(Error.class, () -> cartransport.unloadCar());
     }
     @Test
-    public void carTransportStack() {
+    public void carTransportStack() {   // Test the order of loading/unloading
+        CarTransport cartransport = new CarTransport();
+        cartransport.raiseCargoBed();
+        
+        Saab95 car1 = new Saab95();
+        car1.setPosition(cartransport.getPosition());
+        Saab95 car2 = new Saab95();
+        car2.setPosition(cartransport.getPosition());
+        Saab95 car3 = new Saab95();
+        car3.setPosition(cartransport.getPosition());
+        Saab95 car4 = new Saab95();
+        car4.setPosition(cartransport.getPosition());
 
+        cartransport.loadCar(car1);
+        cartransport.loadCar(car2);
+        cartransport.loadCar(car3);
+        cartransport.loadCar(car4);
+
+        Assert.assertEquals(car4, cartransport.unloadCar());
+        Assert.assertEquals(car3, cartransport.unloadCar());
+        Assert.assertEquals(car2, cartransport.unloadCar());
+        Assert.assertEquals(car1, cartransport.unloadCar());
     }
     @Test
     public void carTransportLoadingSize() {
+        CarTransport cartransport = new CarTransport();
+        cartransport.raiseCargoBed();
 
+        Scania truck = new Scania();
+        truck.setPosition(cartransport.getPosition());
+
+        // Assure that a car that is too large won't load into the transport.
+        Assert.assertTrue(cartransport.getMaxCarSize() < truck.getSize());
+        Assert.assertFalse(cartransport.loadCar(truck));
     }
     @Test
     public void carTransportLoadedCarPosition() {
+        CarTransport cartransport = new CarTransport();
+        cartransport.raiseCargoBed();
 
+        // Create a car that is too far away.
+        Saab95 car = new Saab95();
+        double[] outOfRangePosition = new double[2];
+        outOfRangePosition[0] = cartransport.getPosition()[0] + 20;
+        outOfRangePosition[1] = cartransport.getPosition()[1] + 20;
+        car.setPosition(outOfRangePosition);
+        // Make sure that the car won't load into the transport.
+        Assert.assertFalse(cartransport.loadCar(car));
     }
     @Test
     public void carTransportCapacity() {
+        CarTransport cartransport = new CarTransport();
+        cartransport.raiseCargoBed();
+        
+        Saab95 car1 = new Saab95();
+        car1.setPosition(cartransport.getPosition());
+        Saab95 car2 = new Saab95();
+        car2.setPosition(cartransport.getPosition());
+        Saab95 car3 = new Saab95();
+        car3.setPosition(cartransport.getPosition());
+        Saab95 car4 = new Saab95();
+        car4.setPosition(cartransport.getPosition());
+        Saab95 car5 = new Saab95();
+        car5.setPosition(cartransport.getPosition());
 
+        Assert.assertTrue(cartransport.loadCar(car1));
+        Assert.assertTrue(cartransport.loadCar(car2));
+        Assert.assertTrue(cartransport.loadCar(car3));
+        Assert.assertTrue(cartransport.loadCar(car4));
+        // Make sure that the fifth car won't load into the transport.
+        Assert.assertFalse(cartransport.loadCar(car5));
+    }
+    @Test
+    public void carTransportMovement() {
+        CarTransport cartransport = new CarTransport();
+        cartransport.raiseCargoBed();
+        Saab95 car = new Saab95();
+        car.setPosition(cartransport.getPosition());
+
+        cartransport.loadCar(car);
+        cartransport.lowerCargoBed();
+
+        double[] oldCarPos = new double[2];
+        System.arraycopy(car.getPosition(), 0, oldCarPos, 0, 2);
+        double[] oldTransportPos = new double[2];
+        System.arraycopy(cartransport.getPosition(), 0, oldTransportPos, 0, 2);
+
+        Assert.assertEquals(cartransport.getPosition(), car.getPosition());
+
+        cartransport.startEngine();
+        for (int i = 0; i < 100; i++) {
+            cartransport.gas(1);
+        }
+        cartransport.move();
+
+        Assert.assertEquals(cartransport.getPosition(), car.getPosition());
+
+        Assert.assertTrue((oldTransportPos[0] != cartransport.getPosition()[0]) || (oldTransportPos[1] != cartransport.getPosition()[1]));
+        Assert.assertTrue((oldCarPos[0] != car.getPosition()[0]) || (oldCarPos[1] != car.getPosition()[1]));
+        Assert.assertNotEquals(oldCarPos, car.getPosition());
+        Assert.assertNotEquals(oldTransportPos, cartransport.getPosition());
     }
 
 
