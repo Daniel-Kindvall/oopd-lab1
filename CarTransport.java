@@ -1,26 +1,27 @@
 import java.awt.*;
 import java.util.Stack;
 
-public class CarTransport extends Truck{
+public class CarTransport {
     Stack<Car> carStack = new Stack<>();
     int carStackSize = 4;
     int maxCarSize = 2;
+
+    private Truck parent;
 
     public int getMaxCarSize() {
         return maxCarSize;
     }
 
     public CarTransport(){
-        super(2, 400, Color.blue, "Lada", 3, 0.5);
+        // Create an anonymous class
+        this.parent = new Truck(2, 400, Color.blue, "Lada", 3, 0.5){};
     }
 
     public void raiseCargoBed(){
-        super.raiseCargoBed(1);
+        parent.raiseCargoBed(1);
     }
 
-    public void lowerCargoBed(){
-        super.lowerCargoBed(70);
-    }
+    public void lowerCargoBed(){parent.lowerCargoBed(70);}
 
     private double calculateDistance(Car car) {
         double[] difference = new double[2];
@@ -65,12 +66,13 @@ public class CarTransport extends Truck{
 
     @Override
     public void move() {
-        getPosition()[0] = getDirection()[0] * getCurrentSpeed() + getPosition()[0];
-        getPosition()[1] = getDirection()[1] * getCurrentSpeed() + getPosition()[1];
+        double[] newPos = new double[2];
+        newPos[0] = getDirection()[0] * getCurrentSpeed() + getPosition()[0];
+        newPos[1] = getDirection()[1] * getCurrentSpeed() + getPosition()[1];
+        this.setPosition(newPos);
         
         for (int index = 0; index < carStack.size(); index++) {
-            carStack.elementAt(index).getPosition()[0] = carStack.elementAt(index).getDirection()[0] * carStack.elementAt(index).getCurrentSpeed() + carStack.elementAt(index).getPosition()[0];
-            carStack.elementAt(index).getPosition()[1] = carStack.elementAt(index).getDirection()[1] * carStack.elementAt(index).getCurrentSpeed() + carStack.elementAt(index).getPosition()[1];
+            carStack.elementAt(index).setPosition(newPos);
         }
     }
 }
