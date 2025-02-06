@@ -198,10 +198,10 @@ public class CarsTest {
         // Assure that the cartransport won't load a car when the ramp is closed.
         Assert.assertFalse(cartransport.loadCar(car));
 
-        cartransport.raiseCargoBed();
+        cartransport.openRamp();
         // Assure the transport should be able to load the car
         Assert.assertEquals(1, car.getSize(), 0.0001);
-        Assert.assertTrue(cartransport.getCargoBedAngle() > 0);
+        Assert.assertTrue(cartransport.isRampOpen());
         Assert.assertEquals(cartransport.getPosition()[0], car.getPosition()[0], 0.0001);
         Assert.assertEquals(cartransport.getPosition()[1], car.getPosition()[1], 0.0001);
 
@@ -210,17 +210,17 @@ public class CarsTest {
     @Test
     public void carTransportUnloading() {
         CarTransport cartransport = new CarTransport();
-        cartransport.raiseCargoBed();
+        cartransport.openRamp();
 
         Saab95 car = new Saab95();
         car.setPosition(cartransport.getPosition());
         Assert.assertTrue(cartransport.loadCar(car));
 
         // Assure an error is thrown if the ramp is closed.
-        cartransport.lowerCargoBed();
+        cartransport.closeRamp();
         Assert.assertThrows(Error.class, () -> cartransport.unloadCar());
 
-        cartransport.raiseCargoBed();
+        cartransport.openRamp();
         cartransport.unloadCar();
 
         // Assure an error is thrown if there are no cars on the transport.
@@ -229,7 +229,7 @@ public class CarsTest {
     @Test
     public void carTransportStack() {   // Test the order of loading/unloading
         CarTransport cartransport = new CarTransport();
-        cartransport.raiseCargoBed();
+        cartransport.openRamp();
         
         Saab95 car1 = new Saab95();
         car1.setPosition(cartransport.getPosition());
@@ -253,7 +253,7 @@ public class CarsTest {
     @Test
     public void carTransportLoadingSize() {
         CarTransport cartransport = new CarTransport();
-        cartransport.raiseCargoBed();
+        cartransport.openRamp();
 
         Scania truck = new Scania();
         truck.setPosition(cartransport.getPosition());
@@ -265,7 +265,7 @@ public class CarsTest {
     @Test
     public void carTransportLoadedCarPosition() {
         CarTransport cartransport = new CarTransport();
-        cartransport.raiseCargoBed();
+        cartransport.openRamp();
 
         // Create a car that is too far away.
         Saab95 car = new Saab95();
@@ -279,7 +279,7 @@ public class CarsTest {
     @Test
     public void carTransportCapacity() {
         CarTransport cartransport = new CarTransport();
-        cartransport.raiseCargoBed();
+        cartransport.openRamp();
         
         Saab95 car1 = new Saab95();
         car1.setPosition(cartransport.getPosition());
@@ -302,12 +302,12 @@ public class CarsTest {
     @Test
     public void carTransportMovement() {
         CarTransport cartransport = new CarTransport();
-        cartransport.raiseCargoBed();
+        cartransport.openRamp();
         Saab95 car = new Saab95();
         car.setPosition(cartransport.getPosition());
 
         cartransport.loadCar(car);
-        cartransport.lowerCargoBed();
+        cartransport.closeRamp();
 
         double[] oldCarPos = new double[2];
         System.arraycopy(car.getPosition(), 0, oldCarPos, 0, 2);
@@ -352,11 +352,11 @@ public class CarsTest {
         Saab95 car = new Saab95();
         car.setPosition(cartransport.getPosition());
 
-        cartransport.raiseCargoBed();
+        cartransport.openRamp();
 
         // Assure the transport is able to load the car
         Assert.assertEquals(1, car.getSize(), 0.0001);
-        Assert.assertTrue(cartransport.getCargoBedAngle() > 0);
+        Assert.assertTrue(cartransport.isRampOpen());
         Assert.assertEquals(cartransport.getPosition()[0], car.getPosition()[0], 0.0001);
         Assert.assertEquals(cartransport.getPosition()[1], car.getPosition()[1], 0.0001);
 
