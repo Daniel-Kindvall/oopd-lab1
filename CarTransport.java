@@ -21,6 +21,8 @@ public class CarTransport {
         parent.gas(amount);
     }
 
+    public void brake(double amount) {parent.gas(amount);}
+
     public double[] getPosition() {
         return parent.getPosition();
     }
@@ -36,6 +38,10 @@ public class CarTransport {
     public void setPosition(double[] newPos) {
         parent.setPosition(newPos);
     }
+
+    public void turnRight() {parent.turnRight();}
+
+    public void turnLeft() {parent.turnLeft();}
 
     /* Car transport specific methods */
     public int getMaxCarSize() {
